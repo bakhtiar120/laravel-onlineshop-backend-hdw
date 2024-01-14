@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class CategoryController extends Controller
 {
@@ -67,9 +68,11 @@ class CategoryController extends Controller
     }
 
     public function destroy($id) {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return redirect()->route('user.index');
+        $category = Category::findOrFail($id);
+        $path_file = public_path()."/upload/categories".$category->image;
+        $delete_file=File::delete($path_file);
+        $category->delete();
+        return redirect()->route('category.index');
 
     }
 }
